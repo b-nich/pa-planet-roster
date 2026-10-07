@@ -98,29 +98,45 @@
         return sicon ? 'coui://ui/main/atlas/icon_atlas/img/strategic_icons/icon_si_' + sicon + '.png' : '';
     };
 
-    // unit_types per spec, fetched from the unit's own JSON once.
+    // unit_types per spec, fetched from the unit's JSON once. Many units (all
+    // commander variants, for example) declare no unit_types of their own and
+    // inherit them through base_spec, so follow that chain.
     var typesCache = {};        // base spec -> array of UNITTYPE_* (or null while loading)
+    var MAX_BASE_DEPTH = 6;
+
+    var fetchSpecTypes = function (path, depth, done) {
+        // Specs live at coui://pa/units/...; the stock code reaches them via a
+        // protocol-relative "//pa/..." URL. Fetch as text and parse ourselves.
+        $.ajax({ url: 'coui:/' + path, dataType: 'text' }).done(function (text) {
+            var json = null;
+            try {
+                json = JSON.parse(text);
+            }
+            catch (e) {
+                log('unit spec ' + path + ' is not JSON: ' + e);
+            }
+            var types = (json && json.unit_types) || [];
+            if (types.length || !json || !json.base_spec || depth >= MAX_BASE_DEPTH) {
+                done(types);
+                return;
+            }
+            fetchSpecTypes(baseSpec(json.base_spec), depth + 1, done);
+        }).fail(function (xhr, status) {
+            log('could not read unit spec coui:/' + path + ' (' + status + ')');
+            done([]);
+        });
+    };
+
     var typesFor = function (spec) {
         var base = baseSpec(spec);
         if (typesCache.hasOwnProperty(base))
             return typesCache[base];
         typesCache[base] = null;
-        // Specs live at coui://pa/units/...; the stock code reaches them via a
-        // protocol-relative "//pa/..." URL. Fetch as text and parse ourselves.
-        $.ajax({ url: 'coui:/' + base, dataType: 'text' }).done(function (text) {
-            var types = [];
-            try {
-                var json = JSON.parse(text);
-                types = (json && json.unit_types) || [];
-            }
-            catch (e) {
-                log('unit spec ' + base + ' is not JSON: ' + e);
-            }
+        fetchSpecTypes(base, 0, function (types) {
             typesCache[base] = types;
+            if (!types.length)
+                log('no unit_types found for ' + base + ' (or its base specs); grouped as Other');
             dirty = true;
-        }).fail(function (xhr, status) {
-            typesCache[base] = [];
-            log('could not read unit spec coui:/' + base + ' (' + status + ')');
         });
         return null;
     };
