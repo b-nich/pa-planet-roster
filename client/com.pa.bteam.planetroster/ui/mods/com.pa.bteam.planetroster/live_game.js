@@ -36,6 +36,10 @@
     container.setAttribute('style', 'position: fixed; left: 0px; top: 150px; width: 320px; min-height: 40px; z-index: 5; pointer-events: none;');
     var panelElement = document.createElement('panel');
     panelElement.id = PANEL;
+    // The engine's view region is this element's bounding box. An unknown
+    // element lays out inline, so its box would be one text line at the
+    // baseline of the dock inside it, not the dock itself. Make it a block.
+    panelElement.setAttribute('style', 'display: block;');
     panelElement.setAttribute('src', PAGE);
     panelElement.setAttribute('no-gpu', '');
     panelElement.setAttribute('no-keyboard', '');
