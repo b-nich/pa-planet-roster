@@ -45,11 +45,27 @@
     document.body.appendChild(container);
     try {
         api.Panel.bindElement(panelElement);
-        log('panel element created for ' + PAGE);
+        log('panel element bound for ' + PAGE);
     }
     catch (e) {
         console.error(TAG + ' panel creation failed', e);
     }
+
+    // Diagnostics: did the engine actually create a view for the element?
+    var describePanel = function (when) {
+        var p = api.panels && api.panels[PANEL];
+        var rect = container.getBoundingClientRect();
+        var dock = panelElement.querySelector('panel-dock');
+        log('panel check (' + when + '): ' +
+            (p ? ('object present, engine id=' + p.id + ' visible=' + p.visible + ' fit=' + p.fit + ' region=' + JSON.stringify(p.region))
+               : 'NO panel object (engine refused the create call or it was destroyed)') +
+            ' container=' + Math.round(rect.left) + ',' + Math.round(rect.top) + ' ' + Math.round(rect.width) + 'x' + Math.round(rect.height) +
+            ' jqVisible=' + $(container).is(':visible') + '/' + $(panelElement).is(':visible') +
+            ' dock=' + (dock ? Math.round(dock.getBoundingClientRect().width) + 'x' + Math.round(dock.getBoundingClientRect().height) : 'none') +
+            ' panelsKnown=' + _.keys(api.panels || {}).join(','));
+    };
+    setTimeout(function () { describePanel('3s'); }, 3000);
+    setTimeout(function () { describePanel('15s'); }, 15000);
 
     // ------------------------------------------------------------------
     // Spec lookups
@@ -85,12 +101,22 @@
         if (typesCache.hasOwnProperty(base))
             return typesCache[base];
         typesCache[base] = null;
-        $.getJSON(base).done(function (json) {
-            typesCache[base] = (json && json.unit_types) || [];
+        // Specs live at coui://pa/units/...; the stock code reaches them via a
+        // protocol-relative "//pa/..." URL. Fetch as text and parse ourselves.
+        $.ajax({ url: 'coui:/' + base, dataType: 'text' }).done(function (text) {
+            var types = [];
+            try {
+                var json = JSON.parse(text);
+                types = (json && json.unit_types) || [];
+            }
+            catch (e) {
+                log('unit spec ' + base + ' is not JSON: ' + e);
+            }
+            typesCache[base] = types;
             dirty = true;
-        }).fail(function () {
+        }).fail(function (xhr, status) {
             typesCache[base] = [];
-            log('could not read unit spec ' + base);
+            log('could not read unit spec coui:/' + base + ' (' + status + ')');
         });
         return null;
     };
@@ -176,7 +202,13 @@
     var fetching = false;
     var loggedOnce = false;
 
-    var send = function (payload) { api.Panel.message(PANEL, 'roster.update', payload); };
+    var sent = 0;
+    var send = function (payload) {
+        api.Panel.message(PANEL, 'roster.update', payload);
+        sent = sent + 1;
+        if (sent === 1 || sent === 10)
+            log('sent update #' + sent + ': planet=' + payload.planet + ' units=' + payload.unitCount + ' groups=' + (payload.groups || []).length);
+    };
 
     var build = function (planet, bySpec) {
         var groups = {};

@@ -43,10 +43,17 @@ $(document).ready(function () {
 
     model = new RosterModel();
 
+    var received = 0;
     handlers['roster.update'] = function (payload) {
-        if (payload)
-            model.update(payload);
+        if (!payload)
+            return;
+        model.update(payload);
+        received = received + 1;
+        if (received === 1)
+            console.log('[planetroster] roster page received first update: planet=' + payload.planet + ' units=' + payload.unitCount);
     };
+
+    console.log('[planetroster] roster page script running, pageId=' + api.Panel.pageId + ' parentId=' + api.Panel.parentId);
 
     // inject per scene mods
     if (window.scene_mod_list && scene_mod_list['planet_roster'])
@@ -61,4 +68,5 @@ $(document).ready(function () {
     // Ask the main view for the current state right away.
     if (api.Panel.parentId)
         api.Panel.message(api.Panel.parentId, 'planet_roster.ready', {});
+    console.log('[planetroster] roster page bound, body ' + document.body.offsetWidth + 'x' + document.body.offsetHeight);
 });
