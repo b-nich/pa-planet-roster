@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta locns="live_game" />
+        <noloc><title>Planet Roster</title></noloc>
+        <link href="bundle://boot/boot.css" rel="stylesheet" type="text/css" />
+        <link href="roster.css" rel="stylesheet" type="text/css" />
+        <script src="bundle://boot/boot.js" type="text/javascript"></script>
+        <script src="roster.js" type="text/javascript"></script>
+    </head>
+    <body class="body_panel">
+        <body-dock>
+            <div class="roster" data-bind="css: { collapsed: collapsed }">
+                <div class="roster-header">
+                    <span class="roster-toggle" data-bind="click: toggleCollapsed, text: collapsed() ? '+' : '&minus;'"></span>
+                    <span class="roster-planet" data-bind="text: planetName() || status()"></span>
+                    <span class="roster-total" data-bind="text: unitCount, visible: planet() >= 0"></span>
+                    <span class="roster-pin" data-bind="click: togglePin, css: { active: pinned }, attr: { title: pinned() ? 'Following camera is off' : 'Pin to this planet' }">&#9679;</span>
+                </div>
+                <div class="roster-body" data-bind="visible: !collapsed()">
+                    <!-- ko foreach: groups -->
+                    <div class="roster-group" data-bind="css: { empty: total === 0 }">
+                        <div class="roster-group-header" data-bind="click: function () { $root.selectGroup($data); }">
+                            <span class="roster-group-name" data-bind="text: name"></span>
+                            <span class="roster-group-idle" data-bind="visible: idle > 0, text: idle + ' idle'"></span>
+                            <span class="roster-group-total" data-bind="text: total"></span>
+                        </div>
+                        <!-- ko foreach: rows -->
+                        <div class="roster-row" data-bind="click: function () { $root.selectRow($data); }">
+                            <img class="roster-icon" data-bind="attr: { src: icon }, visible: icon" />
+                            <span class="roster-name" data-bind="text: name"></span>
+                            <span class="roster-idle" data-bind="visible: idle > 0, text: idle + ' idle'"></span>
+                            <span class="roster-count" data-bind="text: count"></span>
+                        </div>
+                        <!-- /ko -->
+                    </div>
+                    <!-- /ko -->
+                </div>
+            </div>
+        </body-dock>
+    </body>
+</html>

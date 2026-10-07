@@ -1,0 +1,99 @@
+/* Planet Roster panel */
+
+.body_panel {
+    margin: 0;
+}
+
+.roster {
+    width: 250px;
+    font-family: "Sansation", sans-serif;
+    font-size: 12px;
+    color: #e6e6e6;
+    text-shadow: 0px 0px 3px #000;
+    background: rgba(8, 12, 18, 0.80);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-left: none;
+    border-radius: 0 3px 3px 0;
+}
+
+.roster-header {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    font-weight: bold;
+    font-size: 13px;
+}
+.roster-toggle {
+    width: 14px;
+    margin-right: 6px;
+    cursor: pointer;
+    color: #bbb;
+}
+.roster-toggle:hover { color: #fff; }
+.roster-planet {
+    flex: 1;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.roster-total { margin-left: 8px; color: #fff; }
+.roster-pin {
+    margin-left: 8px;
+    cursor: pointer;
+    color: #666;
+    font-size: 11px;
+}
+.roster-pin:hover { color: #fff; }
+.roster-pin.active { color: #5fd1ff; }
+
+.roster-body {
+    max-height: 640px;
+    overflow-y: auto;
+    padding: 2px 0 4px 0;
+}
+
+.roster-group { margin-top: 3px; }
+.roster-group-header {
+    display: flex;
+    align-items: center;
+    padding: 2px 8px;
+    color: #9fb6c6;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+.roster-group-header:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+.roster-group.empty .roster-group-header { color: #566; cursor: default; }
+.roster-group.empty .roster-group-header:hover { background: none; color: #566; }
+.roster-group-name { flex: 1; }
+.roster-group-idle { margin-right: 8px; color: #e0a040; text-transform: none; letter-spacing: 0; }
+.roster-group-total { min-width: 24px; text-align: right; }
+
+.roster-row {
+    display: flex;
+    align-items: center;
+    height: 20px;
+    padding: 0 8px 0 14px;
+    cursor: pointer;
+}
+.roster-row:hover { background: rgba(255, 255, 255, 0.10); }
+.roster-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+}
+.roster-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.roster-idle { margin-right: 8px; color: #e0a040; font-size: 11px; }
+.roster-count { min-width: 28px; text-align: right; font-weight: bold; }
+
+.roster.collapsed .roster-header { border-bottom: none; }

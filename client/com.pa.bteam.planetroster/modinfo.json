@@ -1,0 +1,24 @@
+{
+    "context": "client",
+    "identifier": "com.pa.bteam.planetroster",
+    "display_name": "Planet Roster",
+    "description": "Always-on list of your units on the planet you are looking at, grouped by category (commanders, fabbers, bots, vehicles, air, naval, orbital, structures) with icons and counts. Click a row to select those units.",
+    "author": "Brad (B-Team)",
+    "authors": ["Brad (B-Team)"],
+    "version": "0.1.0",
+    "build": "124683",
+    "date": "2026-10-07",
+    "signature": "not yet implemented",
+    "forum": "https://github.com/b-nich/pa-planet-roster",
+    "category": ["ui", "titans"],
+    "scenes": {
+        "live_game": [
+            "coui://ui/mods/com.pa.bteam.planetroster/live_game.js"
+        ],
+        "live_game_control_group_bar": [
+            "coui://ui/mods/com.pa.bteam.planetroster/control_group_bar.js"
+        ]
+    },
+    "priority": 100,
+    "enabled": true
+}
