@@ -25,8 +25,12 @@ $(document).ready(function () {
 
         self.toggleCollapsed = function () { self.collapsed(!self.collapsed()); };
         self.togglePin = function () { send('planet_roster.pin'); };
-        self.selectRow = function (row) { send('planet_roster.select', { spec: row.spec }); };
+        self.selectRow = function (row) {
+            console.log('[planetroster] row clicked: ' + row.spec + ' x' + row.count);
+            send('planet_roster.select', { spec: row.spec });
+        };
         self.selectGroup = function (group) {
+            console.log('[planetroster] group clicked: ' + group.key + ' total ' + group.total);
             if (group.total > 0)
                 send('planet_roster.select', { group: group.key });
         };

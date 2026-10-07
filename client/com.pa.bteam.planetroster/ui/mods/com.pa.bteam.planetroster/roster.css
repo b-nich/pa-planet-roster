@@ -12,6 +12,11 @@ body-dock {
     width: 250px;
 }
 
+/* Panel pages decide per element whether the mouse hits them or falls through
+   to the world; the roster takes clicks. */
+.receiveMouse { pointer-events: all; }
+.ignoreMouse  { pointer-events: none; }
+
 .roster {
     width: 100%;
     font-family: "Sansation", sans-serif;

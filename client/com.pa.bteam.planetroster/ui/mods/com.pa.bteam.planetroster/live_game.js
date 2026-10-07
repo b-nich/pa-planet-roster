@@ -332,11 +332,18 @@
             ids = lastIds[payload.spec];
         else if (payload && payload.group && lastGroupSpecs[payload.group])
             _.forEach(lastGroupSpecs[payload.group], function (spec) { ids = ids.concat(lastIds[spec] || []); });
+        log('select request ' + JSON.stringify(payload) + ' -> ' + ids.length + ' unit ids');
         if (!ids.length)
             return;
-        api.select.unitsById(ids, false);
-        if (payload.track && api.camera && api.camera.track)
-            api.camera.track(true);
+        try {
+            var result = api.select.unitsById(ids, false);
+            if (result && result.then)
+                result.then(function (ok) { log('select.byIds returned ' + JSON.stringify(ok)); },
+                            function (error) { log('select.byIds failed ' + JSON.stringify(error)); });
+        }
+        catch (e) {
+            log('select threw: ' + e);
+        }
     };
 
     handlers['planet_roster.pin'] = function () {
