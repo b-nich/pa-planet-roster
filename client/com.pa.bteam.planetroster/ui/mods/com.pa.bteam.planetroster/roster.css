@@ -4,8 +4,16 @@
     margin: 0;
 }
 
-.roster {
+/* The panel reports the size of <body-dock> to the main page, which sizes the
+   engine view from it. As an unknown element it would render inline with no
+   measurable width, so give it an explicit block layout. */
+body-dock {
+    display: block;
     width: 250px;
+}
+
+.roster {
+    width: 100%;
     font-family: "Sansation", sans-serif;
     font-size: 12px;
     color: #e6e6e6;
