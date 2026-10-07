@@ -47,6 +47,30 @@ Data sources, all client side:
 
 Selection uses `api.select.unitsById` with the ids from the last poll.
 
+### Recipe: a mod-created panel
+
+This is the first of these mods to create its own panel rather than inject
+into an existing one. Three things are required, each learned from a failed
+attempt:
+
+1. **Create it the way the game does.** Append a `<panel id="..." src="coui://ui/mods/<mod>/page.html" fit="dock-top-left" no-gpu no-keyboard yield-focus>`
+   element to the live game page and call `api.Panel.bindElement(element)`.
+   The engine accepts panels created after startup.
+2. **Lay the element out as a block** (`style="display: block"`). The engine's
+   view region is the element's bounding box; an unknown element is inline, so
+   its box is one text line at the baseline of the dock inside it, and the
+   view ends up one line tall in the wrong place.
+3. **Give the page's `<body-dock>` an explicit block size.** The page reports
+   the dock's measured size to the main view, which sizes the view from it; an
+   inline dock measures 0x0.
+
+The page itself is a normal panel page: `bundle://boot/boot.js`, a knockout
+model, `app.registerWithCoherent(model, handlers)`, `ko.applyBindings`.
+Messages flow with `api.Panel.message('<panel id>', ...)` from the main view
+and `api.Panel.message(api.Panel.parentId, ...)` from the page. Elements that
+should take the mouse carry `pointer-events: all`; everything else falls
+through to the world.
+
 ## Developer install
 
 Run from this folder in PowerShell after every edit:
