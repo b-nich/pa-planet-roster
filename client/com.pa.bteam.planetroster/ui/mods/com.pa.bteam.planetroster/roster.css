@@ -123,10 +123,9 @@ body-dock {
     flex-wrap: wrap;
     padding: 2px 6px 2px 12px;
 }
+/* Tile and icon sizes are set inline from the build bar scale setting. */
 .roster-tile {
     position: relative;
-    width: 40px;
-    height: 40px;
     margin: 2px;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.14);
@@ -141,8 +140,6 @@ body-dock {
     position: absolute;
     left: 0;
     top: 0;
-    width: 40px;
-    height: 40px;
 }
 .roster-tile-fallback {
     position: absolute;
@@ -157,8 +154,8 @@ body-dock {
     position: absolute;
     right: 0;
     bottom: 0;
-    padding: 0 3px;
-    font-size: 11px;
+    padding: 0 4px;
+    font-size: 14px;
     font-weight: bold;
     color: #fff;
     background: rgba(0, 0, 0, 0.65);
@@ -168,8 +165,8 @@ body-dock {
     position: absolute;
     left: 0;
     bottom: 0;
-    padding: 0 3px;
-    font-size: 10px;
+    padding: 0 4px;
+    font-size: 12px;
     font-weight: bold;
     color: #e0a040;
     background: rgba(0, 0, 0, 0.65);

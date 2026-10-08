@@ -21,6 +21,19 @@ $(document).ready(function () {
         self.listLayout = ko.observable(false).extend({ local: 'planetroster_list_layout' });
         self.toggleLayout = function () { self.listLayout(!self.listLayout()); };
 
+        // Same size as the build bar's icons: 60px times the UI build bar scale.
+        var buildBarScale = 1;
+        try {
+            buildBarScale = Number(api.settings.getSynchronous('ui', 'buildbar_scale')) || 1;
+        } catch (e) { }
+        self.tileSize = Math.round(60 * buildBarScale);
+        self.tileSizeCss = self.tileSize + 'px';
+        // Four tiles per row plus the group indent and margins.
+        self.panelWidth = 4 * (self.tileSize + 4) + 18;
+        var dock = document.getElementsByTagName('body-dock')[0];
+        if (dock)
+            dock.style.width = self.panelWidth + 'px';
+
         var send = function (name, payload) {
             if (api.Panel.parentId)
                 api.Panel.message(api.Panel.parentId, name, payload || {});

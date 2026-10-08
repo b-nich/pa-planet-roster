@@ -39,8 +39,8 @@
                         <!-- /ko -->
                         <!-- ko ifnot: $root.listLayout -->
                         <div class="roster-tiles" data-bind="visible: rows.length > 0, foreach: rows">
-                            <div class="roster-tile" data-bind="click: function () { $root.selectRow($data); }, attr: { title: name + ' x' + count + (idle > 0 ? ' (' + idle + ' idle)' : '') }, css: { 'has-idle': idle > 0 }">
-                                <img class="roster-tile-icon" data-bind="attr: { src: icon }, visible: icon" />
+                            <div class="roster-tile" data-bind="click: function () { $root.selectRow($data); }, attr: { title: name + ' x' + count + (idle > 0 ? ' (' + idle + ' idle)' : '') }, css: { 'has-idle': idle > 0 }, style: { width: $root.tileSizeCss, height: $root.tileSizeCss }">
+                                <img class="roster-tile-icon" data-bind="attr: { src: icon }, visible: icon, style: { width: $root.tileSizeCss, height: $root.tileSizeCss }" />
                                 <span class="roster-tile-fallback" data-bind="visible: !icon, text: name.substr(0, 2)"></span>
                                 <span class="roster-tile-count" data-bind="text: count"></span>
                                 <span class="roster-tile-idle" data-bind="visible: idle > 0, text: idle"></span>
