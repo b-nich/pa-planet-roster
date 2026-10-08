@@ -16,9 +16,10 @@
                     <span class="roster-toggle" data-bind="click: toggleCollapsed, text: collapsed() ? '+' : '&minus;'"></span>
                     <span class="roster-planet" data-bind="text: planetName() || status()"></span>
                     <span class="roster-total" data-bind="text: unitCount, visible: planet() >= 0"></span>
+                    <span class="roster-layout" data-bind="click: toggleLayout, text: listLayout() ? '&#9638;' : '&#9776;', attr: { title: listLayout() ? 'Show as tiles' : 'Show as list' }"></span>
                     <span class="roster-pin" data-bind="click: togglePin, css: { active: pinned }, attr: { title: pinned() ? 'Following camera is off' : 'Pin to this planet' }">&#9679;</span>
                 </div>
-                <div class="roster-body" data-bind="visible: !collapsed()">
+                <div class="roster-body" data-bind="visible: !collapsed(), css: { list: listLayout }">
                     <!-- ko foreach: groups -->
                     <div class="roster-group" data-bind="css: { empty: total === 0 }">
                         <div class="roster-group-header" data-bind="click: function () { $root.selectGroup($data); }">
@@ -26,12 +27,24 @@
                             <span class="roster-group-idle" data-bind="visible: idle > 0, text: idle + ' idle'"></span>
                             <span class="roster-group-total" data-bind="text: total"></span>
                         </div>
+                        <!-- ko if: $root.listLayout -->
                         <!-- ko foreach: rows -->
                         <div class="roster-row" data-bind="click: function () { $root.selectRow($data); }">
                             <img class="roster-icon" data-bind="attr: { src: icon }, visible: icon" />
                             <span class="roster-name" data-bind="text: name"></span>
                             <span class="roster-idle" data-bind="visible: idle > 0, text: idle + ' idle'"></span>
                             <span class="roster-count" data-bind="text: count"></span>
+                        </div>
+                        <!-- /ko -->
+                        <!-- /ko -->
+                        <!-- ko ifnot: $root.listLayout -->
+                        <div class="roster-tiles" data-bind="visible: rows.length > 0, foreach: rows">
+                            <div class="roster-tile" data-bind="click: function () { $root.selectRow($data); }, attr: { title: name + ' x' + count + (idle > 0 ? ' (' + idle + ' idle)' : '') }, css: { 'has-idle': idle > 0 }">
+                                <img class="roster-tile-icon" data-bind="attr: { src: icon }, visible: icon" />
+                                <span class="roster-tile-fallback" data-bind="visible: !icon, text: name.substr(0, 2)"></span>
+                                <span class="roster-tile-count" data-bind="text: count"></span>
+                                <span class="roster-tile-idle" data-bind="visible: idle > 0, text: idle"></span>
+                            </div>
                         </div>
                         <!-- /ko -->
                     </div>

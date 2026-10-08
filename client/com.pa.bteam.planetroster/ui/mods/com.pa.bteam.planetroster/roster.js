@@ -17,6 +17,9 @@ $(document).ready(function () {
         self.groups = ko.observableArray([]);
         self.status = ko.observable('');
         self.collapsed = ko.observable(false).extend({ local: 'planetroster_collapsed' });
+        // Tiles (icon + count) by default; a list with names is available.
+        self.listLayout = ko.observable(false).extend({ local: 'planetroster_list_layout' });
+        self.toggleLayout = function () { self.listLayout(!self.listLayout()); };
 
         var send = function (name, payload) {
             if (api.Panel.parentId)
