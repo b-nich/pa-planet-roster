@@ -92,7 +92,15 @@
         return String(name).indexOf('!LOC:') === 0 ? loc(name) : String(name);
     };
 
+    // Same picture as the build bar: <unit>_icon_buildbar.png next to the
+    // spec, resolved by the game's own Build helper. Strategic icon as fallback.
     var iconFor = function (spec) {
+        var base = baseSpec(spec);
+        if (window.Build && Build.iconForUnit) {
+            var icon = Build.iconForUnit({ id: base });
+            if (icon)
+                return icon;
+        }
         var details = detailsFor(spec);
         var sicon = details ? ko.unwrap(details.sicon) : null;
         return sicon ? 'coui://ui/main/atlas/icon_atlas/img/strategic_icons/icon_si_' + sicon + '.png' : '';
